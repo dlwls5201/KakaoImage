@@ -12,6 +12,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "KAKAO_REST_API_KEY",
+                project.properties["KAKAO_REST_API_KEY"] ?: "\"NOT_FOUND\""
     }
     buildTypes {
         release {
