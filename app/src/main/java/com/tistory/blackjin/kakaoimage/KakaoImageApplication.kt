@@ -1,6 +1,7 @@
 package com.tistory.blackjin.kakaoimage
 
 import android.app.Application
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.tistory.blackjin.kakaoimage.di.appModule
 import com.tistory.blackjin.kakaoimage.di.networkModule
 import com.tistory.blackjin.kakaoimage.di.repositoryModule
@@ -17,6 +18,7 @@ class KakaoImageApplication : Application() {
         super.onCreate()
 
         initTimber()
+        initFresco()
         setupKoin()
 
     }
@@ -25,6 +27,10 @@ class KakaoImageApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun initFresco() {
+        Fresco.initialize(this)
     }
 
     private fun setupKoin() {

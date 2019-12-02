@@ -37,11 +37,17 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$appcompatVersion"
 
+    //aac
+    implementation "androidx.lifecycle:lifecycle-extensions:$aacVersion"
+
     //material
     implementation "com.google.android.material:material:$materialVersion"
 
     //constraint
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+
+    //fresco
+    implementation "com.facebook.fresco:fresco:$frescoVersion"
 
     //koin
     implementation "org.koin:koin-android:$koinVersion"

@@ -7,6 +7,9 @@ buildscript {
         minSdkVersion = 19
         targetSdkVersion = 28
 
+        //kotlin
+        kotlinVersion = '1.3.50'
+
         //appcompat
         appcompatVersion = '1.1.0'
 
@@ -19,8 +22,8 @@ buildscript {
         //constraint layout version
         constraintLayoutVersion = '1.1.3'
 
-        //kotlin
-        kotlinVersion = '1.3.50'
+        //fresco
+        frescoVersion = '2.0.0'
 
         //koin
         koinVersion = '2.0.1'
