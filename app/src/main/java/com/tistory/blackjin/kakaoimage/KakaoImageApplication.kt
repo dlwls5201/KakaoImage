@@ -2,10 +2,7 @@ package com.tistory.blackjin.kakaoimage
 
 import android.app.Application
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.tistory.blackjin.kakaoimage.di.appModule
-import com.tistory.blackjin.kakaoimage.di.networkModule
-import com.tistory.blackjin.kakaoimage.di.repositoryModule
-import com.tistory.blackjin.kakaoimage.di.usecaseModule
+import com.tistory.blackjin.kakaoimage.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.logger.AndroidLogger
 import org.koin.core.context.startKoin
@@ -47,7 +44,7 @@ class KakaoImageApplication : Application() {
 
             modules(
                 listOf(
-                    appModule, networkModule, repositoryModule, usecaseModule
+                    appModule, networkModule, repositoryModule, usecaseModule, viewModel
                 )
             )
         }
