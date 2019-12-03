@@ -6,7 +6,8 @@
         android:id="@+id/sdvItemImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        fresco:failureImage="@drawable/ic_launcher_background"
+        fresco:failureImage="@android:color/holo_red_light"
+        fresco:placeholderImage="@android:color/darker_gray"
         fresco:viewAspectRatio="1" />
 
 </layout>
