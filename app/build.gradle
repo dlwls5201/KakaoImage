@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     dataBinding {
         enabled = true
     }
@@ -70,6 +74,7 @@ dependencies {
     //rx android
     implementation "io.reactivex.rxjava2:rxandroid:$rxandoirdVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbindingVersion"
 
     //timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
