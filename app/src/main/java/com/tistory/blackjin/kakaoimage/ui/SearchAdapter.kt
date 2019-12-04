@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.tistory.blackjin.kakaoimage.R
 import com.tistory.blackjin.kakaoimage.data.model.Document
 import com.tistory.blackjin.kakaoimage.databinding.ItemImageBinding
-import timber.log.Timber
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ImageHolder>() {
 
@@ -34,16 +34,18 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ImageHolder>() {
 
     class ImageHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
-            .inflate(com.tistory.blackjin.kakaoimage.R.layout.item_image, parent, false)
+            .inflate(R.layout.item_image, parent, false)
     ) {
 
         private val binding: ItemImageBinding = DataBindingUtil.bind(itemView)!!
 
         fun bind(item: Document) {
             binding.run {
-                Timber.d(item.imageUrl)
+
+                val aspect = item.width.toFloat() / item.height.toFloat()
+                sdvItemImage.aspectRatio = aspect
                 sdvItemImage.setImageURI(item.imageUrl)
-                executePendingBindings()
+
             }
         }
     }
