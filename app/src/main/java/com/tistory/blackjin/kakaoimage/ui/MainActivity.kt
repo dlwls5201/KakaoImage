@@ -3,7 +3,6 @@ package com.tistory.blackjin.kakaoimage.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.tistory.blackjin.kakaoimage.R
@@ -55,18 +54,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             adapter = searchAdapter
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
 
-                    //check for scroll down
-                    if (dy > 0) {
-                        val layoutManager = this@with.layoutManager as LinearLayoutManager
-                        val totalItemCount = layoutManager.itemCount
-                        val lastVisible = layoutManager.findLastCompletelyVisibleItemPosition()
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
 
-                        //Timber.d("totalItemCount : $totalItemCount , lastVisible : $lastVisible")
-                        if (lastVisible >= totalItemCount - 1) {
-                            //Timber.e("last")
+                    when {
+                        !recyclerView.canScrollVertically(-1) -> {
+                            Timber.d("Top of list")
+                        }
+                        !recyclerView.canScrollVertically(1) -> {
+                            Timber.d("End of list")
                             searchViewModel.loadNextImage()
                         }
                     }
