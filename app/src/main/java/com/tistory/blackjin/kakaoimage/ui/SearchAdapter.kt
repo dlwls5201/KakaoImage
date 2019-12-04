@@ -8,12 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tistory.blackjin.kakaoimage.R
 import com.tistory.blackjin.kakaoimage.data.model.Document
 import com.tistory.blackjin.kakaoimage.databinding.ItemImageBinding
+import com.tistory.blackjin.kakaoimage.ui.detail.DetailActivity
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ImageHolder>() {
 
     private var items: MutableList<Document> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ImageHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ImageHolder(parent).apply {
+            itemView.setOnClickListener {
+
+                val item = items[adapterPosition]
+                val aspect = item.width.toFloat() / item.height.toFloat()
+                DetailActivity.startDetailActivity(
+                    parent.context, item.imageUrl, aspect
+                )
+            }
+        }
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
         items[position].let { item ->

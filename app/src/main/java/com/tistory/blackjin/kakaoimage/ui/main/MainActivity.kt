@@ -1,4 +1,4 @@
-package com.tistory.blackjin.kakaoimage.ui
+package com.tistory.blackjin.kakaoimage.ui.main
 
 import android.os.Bundle
 import android.widget.Toast
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.tistory.blackjin.kakaoimage.R
 import com.tistory.blackjin.kakaoimage.databinding.ActivityMainBinding
+import com.tistory.blackjin.kakaoimage.ui.SearchAdapter
+import com.tistory.blackjin.kakaoimage.ui.SearchViewModel
 import com.tistory.blackjin.kakaoimage.ui.base.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
