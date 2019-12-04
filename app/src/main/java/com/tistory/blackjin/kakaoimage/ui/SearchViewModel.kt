@@ -18,6 +18,9 @@ class SearchViewModel(
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _message = MutableLiveData<String>("")
+    val message: LiveData<String> = _message
+
     private val _toastLiveData = MutableLiveData<Event<String>>()
     val toastLiveData: LiveData<Event<String>> = _toastLiveData
 
@@ -25,18 +28,24 @@ class SearchViewModel(
     private var currentPage = 1
     private var isEndPage = false
 
-    private val searchingItems = mutableListOf<Document>()
+    private val showingItems = mutableListOf<Document>()
 
     fun loadImages(query: String, isAdd: Boolean = false) {
 
+        //기존 작업 중인게 있으면 제거
         if (isLoading.value == true) {
-            //기존 작업 중인게 있으면 제거
             compositeDisposable.clear()
         }
 
+        //데이터 추가가 아니면 current page 1 초기화
+        if (!isAdd) {
+            currentPage = 1
+        }
+
+        //현재 검색 값 초기화
         currentQuery = query
 
-        searchImageUsecase.get(query, currentPage)
+        searchImageUsecase.get(currentQuery, currentPage)
             .doOnSubscribe { showLoading() }
             .doOnSuccess { hideLoading() }
             .doOnError { hideLoading() }
@@ -44,34 +53,40 @@ class SearchViewModel(
 
                 val (documents, isEnd) = it
 
-                if (documents.isEmpty()) {
-                    _toastLiveData.value = Event("데이터가 없습니다.")
+                if (isAdd) {
+                    hideMessage()
+                    showingItems.addAll(documents)
                 } else {
-                    if (isAdd) {
-                        searchingItems.addAll(documents)
-                        _items.value = searchingItems
+                    showingItems.clear()
+
+                    if (documents.isEmpty()) {
+                        showMessage("No result")
                     } else {
-                        currentPage = 1
-                        searchingItems.clear()
-                        searchingItems.addAll(documents)
-                        _items.value = documents
+                        hideMessage()
+                        showingItems.addAll(documents)
                     }
                 }
 
-                Timber.d("currentPage : $currentPage , searchingItems : ${searchingItems.size} , isEnd : $isEnd")
+                _items.value = showingItems
                 isEndPage = isEnd
 
             }) {
                 Timber.e(it)
+                showMessage(it.message)
             }.also {
                 compositeDisposable.add(it)
             }
     }
 
-    fun loadNextImage() {
-        Timber.d("isEndItem : $isEndPage")
+    fun loadNextImages() {
+
+        if (isLoading.value == true) {
+            showToast("loading...")
+            return
+        }
+
         if (isEndPage) {
-            _toastLiveData.value = Event("last page")
+            showToast("last page")
         } else {
             currentPage++
             loadImages(currentQuery, true)
@@ -84,5 +99,19 @@ class SearchViewModel(
 
     private fun hideLoading() {
         _isLoading.value = false
+    }
+
+    private fun showToast(toast: String) {
+        _toastLiveData.value = Event(toast)
+    }
+
+    private fun showMessage(message: String?) {
+        message?.let {
+            _message.value = it
+        }
+    }
+
+    private fun hideMessage() {
+        _message.value = ""
     }
 }

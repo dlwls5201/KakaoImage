@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KakaoImage</string>
+    <string name="search_keyword">Search Keyword</string>
 </resources>

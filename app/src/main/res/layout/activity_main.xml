@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:toosl="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.text.TextUtils" />
 
         <import type="android.view.View" />
 
@@ -19,6 +22,7 @@
             android:id="@+id/et_search_image"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
+            android:hint="@string/search_keyword"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:paddingStart="@dimen/edit_padding_side"
@@ -38,6 +42,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_search_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewmodel.message}"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:visibility="@{TextUtils.isEmpty(viewmodel.message) ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            toosl:text="message" />
 
         <ProgressBar
             android:layout_width="wrap_content"

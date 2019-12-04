@@ -11,7 +11,6 @@ import com.tistory.blackjin.kakaoimage.ui.base.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -24,29 +23,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.e("onCreate")
 
         binding.viewmodel = searchViewModel
         binding.etSearchImage.requestFocus()
 
         setupRecyclerView()
-        initRxBinding()
-
-        searchViewModel.items.observe(this, Observer {
-            searchAdapter.replaceAll(it)
-        })
-
-        searchViewModel.toastLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        })
+        initRxBinding(savedInstanceState)
+        initObserver()
     }
 
     override fun onDestroy() {
-        Timber.e("onDestroy")
         viewDisposable.clear()
         super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val keyword = binding.etSearchImage.text.toString()
+        outState.putString(KET_SEARCH_KEYWORD, keyword)
     }
 
     private fun setupRecyclerView() {
@@ -60,11 +54,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
                     when {
                         !recyclerView.canScrollVertically(-1) -> {
-                            Timber.d("Top of list")
+                            //Top of list
                         }
                         !recyclerView.canScrollVertically(1) -> {
-                            Timber.d("End of list")
-                            searchViewModel.loadNextImage()
+                            //End of list"
+                            searchViewModel.loadNextImages()
                         }
                     }
                 }
@@ -72,16 +66,45 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun initRxBinding() {
+    private fun initRxBinding(savedInstanceState: Bundle?) {
         binding.etSearchImage.textChanges()
             .debounce(1000L, TimeUnit.MILLISECONDS)
             .filter { it.isNotEmpty() }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                Timber.d("$it")
-                searchViewModel.loadImages(it.toString())
+                if (!checkAlreadySearch(savedInstanceState, it.toString())) {
+                    searchViewModel.loadImages(it.toString())
+                }
             }.also {
                 viewDisposable.add(it)
             }
+    }
+
+    private fun checkAlreadySearch(savedInstanceState: Bundle?, query: String): Boolean {
+        val keyword = savedInstanceState?.getString(KET_SEARCH_KEYWORD)
+
+        return if (keyword.isNullOrEmpty()) {
+            false
+        } else {
+            savedInstanceState.remove(KET_SEARCH_KEYWORD)
+            keyword == query
+        }
+    }
+
+    private fun initObserver() {
+        searchViewModel.items.observe(this, Observer {
+            searchAdapter.replaceAll(it)
+        })
+
+        searchViewModel.toastLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    companion object {
+
+        private const val KET_SEARCH_KEYWORD = "search_keyword"
     }
 }
