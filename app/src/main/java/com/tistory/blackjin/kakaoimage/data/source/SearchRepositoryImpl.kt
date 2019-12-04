@@ -2,7 +2,6 @@ package com.tistory.blackjin.kakaoimage.data.source
 
 import com.tistory.blackjin.kakaoimage.data.model.SearchResponse
 import com.tistory.blackjin.kakaoimage.data.source.remote.SearchApi
-import com.tistory.blackjin.kakaoimage.domain.exception.composeDomain
 import io.reactivex.Single
 
 class SearchRepositoryImpl(
@@ -11,7 +10,6 @@ class SearchRepositoryImpl(
 
     override fun getImages(query: String, page: Int): Single<SearchResponse> {
         return searchApi.searchImage(query, page, PER_PAGE)
-            .composeDomain()
     }
 
     companion object {

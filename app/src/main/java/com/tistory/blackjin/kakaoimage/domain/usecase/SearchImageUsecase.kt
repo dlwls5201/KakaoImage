@@ -2,7 +2,6 @@ package com.tistory.blackjin.kakaoimage.domain.usecase
 
 import com.tistory.blackjin.kakaoimage.data.source.SearchRepository
 import com.tistory.blackjin.kakaoimage.scheduler.SchedulersProvider
-import io.reactivex.Single
 
 class SearchImageUsecase(
     private val searchRepository: SearchRepository,
@@ -17,8 +16,4 @@ class SearchImageUsecase(
                 Pair(it.documents, it.meta.isEnd)
             }
             .observeOn(schedulerProvider.ui())
-            .onErrorResumeNext {
-                Single.error(it)
-            }
-
 }

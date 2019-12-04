@@ -6,6 +6,7 @@ import com.tistory.blackjin.kakaoimage.data.model.Document
 import com.tistory.blackjin.kakaoimage.domain.usecase.SearchImageUsecase
 import com.tistory.blackjin.kakaoimage.ui.base.BaseViewModel
 import com.tistory.blackjin.kakaoimage.util.Event
+import retrofit2.HttpException
 import timber.log.Timber
 
 class SearchViewModel(
@@ -53,16 +54,15 @@ class SearchViewModel(
 
                 val (documents, isEnd) = it
 
+                hideMessage()
+
                 if (isAdd) {
-                    hideMessage()
                     showingItems.addAll(documents)
                 } else {
                     showingItems.clear()
-
                     if (documents.isEmpty()) {
                         showMessage("No result")
                     } else {
-                        hideMessage()
                         showingItems.addAll(documents)
                     }
                 }
@@ -70,12 +70,23 @@ class SearchViewModel(
                 _items.value = showingItems
                 isEndPage = isEnd
 
-            }) {
-                Timber.e(it)
-                showMessage(it.message)
-            }.also {
+            }, ::errorHandling)
+            .also {
                 compositeDisposable.add(it)
             }
+    }
+
+    private fun errorHandling(throwable: Throwable) {
+        showingItems.clear()
+        _items.value = showingItems
+
+        if (throwable is HttpException) {
+            showMessage(throwable.message())
+        } else {
+            showMessage("Unexpected Error")
+        }
+
+        Timber.e(throwable)
     }
 
     fun loadNextImages() {
