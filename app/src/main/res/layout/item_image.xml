@@ -7,7 +7,7 @@
         android:id="@+id/sdvItemImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        fresco:actualImageScaleType="fitCenter"
+        fresco:actualImageScaleType="fitXY"
         fresco:failureImage="@drawable/ic_error_red_96dp"
         fresco:failureImageScaleType="centerInside"
         fresco:placeholderImage="@android:color/darker_gray"
